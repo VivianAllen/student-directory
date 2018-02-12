@@ -1,3 +1,4 @@
+# this version only prints student names beginning with b!
 def input_students
   puts 'Please enter the names of the students'
   puts 'To finish, just hit return twice'
@@ -22,7 +23,9 @@ end
 
 def print(students)
   students.each do |student|
-    puts "#{student[:name]} (#{student[:cohort]} cohort)"
+    if student[:name][0].casecmp('b').zero?
+      puts "#{student[:name]} (#{student[:cohort]} cohort)"
+    end
   end
 end
 
