@@ -62,6 +62,7 @@ def print_header
 end
 
 def print(students)
+  return if students.count.zero?
   students.each do |student|
     puts "#{student[:name].center(20)}
      (#{student[:cohort].to_s.center(9)} cohort)"
@@ -69,6 +70,7 @@ def print(students)
 end
 
 def print_cohorts(students)
+  return if students.count.zero?
   cohorts = students.map { |student| student[:cohort] }.uniq
   # determine membership of each cohort
   cohorts.each do |cohort|
@@ -80,6 +82,7 @@ def print_cohorts(students)
 end
 
 def print_footer(students)
+  return if students.count.zero?
   student_string = students.count > 1 ? 'students' : 'student'
   puts "Overall, we have #{students.count} great #{student_string}"
 end
