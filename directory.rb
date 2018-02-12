@@ -1,3 +1,4 @@
+# this version works with while loops instead of each
 def input_students
   puts 'Please enter the names of the students'
   puts 'To finish, just hit return twice'
@@ -21,8 +22,10 @@ def print_header
 end
 
 def print(students)
-  students.each do |student|
-    puts "#{student[:name]} (#{student[:cohort]} cohort)"
+  i = 0
+  while i < students.length
+    puts "#{students[i][:name]} (#{students[i][:cohort]} cohort)"
+    i += 1
   end
 end
 
