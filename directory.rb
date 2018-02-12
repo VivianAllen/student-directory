@@ -50,7 +50,8 @@ def input_students
     break if name.nil?
     cohort = input_cohort
     students << { name: name, cohort: cohort }
-    puts "Now we have #{students.count} students"
+    student_string = students.count > 1 ? 'students' : 'student'
+    puts "Now we have #{students.count} #{student_string}"
   end
   students
 end
@@ -79,7 +80,8 @@ def print_cohorts(students)
 end
 
 def print_footer(students)
-  puts "Overall, we have #{students.count} great students"
+  student_string = students.count > 1 ? 'students' : 'student'
+  puts "Overall, we have #{students.count} great #{student_string}"
 end
 students = input_students
 print_header
