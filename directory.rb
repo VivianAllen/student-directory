@@ -62,7 +62,19 @@ end
 
 def print(students)
   students.each do |student|
-    puts "#{student[:name].center(20)} (#{student[:cohort].to_s.center(9)} cohort)"
+    puts "#{student[:name].center(20)}
+     (#{student[:cohort].to_s.center(9)} cohort)"
+  end
+end
+
+def print_cohorts(students)
+  cohorts = students.map { |student| student[:cohort] }.uniq
+  # determine membership of each cohort
+  cohorts.each do |cohort|
+    puts "Students in #{cohort} cohort:"
+    students.each do |student|
+      puts student[:name] if student[:cohort] == cohort
+    end
   end
 end
 
@@ -71,5 +83,5 @@ def print_footer(students)
 end
 students = input_students
 print_header
-print(students) # is this cool? print is already a built-in method
+print_cohorts(students) # is this cool? print is already a built-in method
 print_footer(students)
