@@ -1,3 +1,4 @@
+# this uses gsub on newline characters instead of chomp!
 def input_name
   blanks = 0
   loop do
@@ -8,15 +9,15 @@ def input_name
       return nil
     end
     puts 'Please enter students name'
-    name = gets.chomp
+    name = gets.gsub(/[\n]/, '')
     if name.empty?
       blanks += 1
     else
       puts "You entered #{name}. Is that correct? y/n"
-      input = gets.chomp
+      input = gets.gsub(/[\n]/, '')
       until %w[y n].include?(input)
         puts 'Please enter y or n'
-        input = gets.chomp
+        input = gets.gsub(/[\n]/, '')
       end
       return name if input.casecmp('y').zero?
     end
@@ -26,16 +27,16 @@ end
 def input_cohort
   loop do
     puts "Please enter students cohort"
-    cohort = gets.chomp
+    cohort = gets.gsub(/[\n]/, '')
     if cohort.empty?
       puts "If no input detected, default (November cohort) will be used"
       cohort = 'November'
     end
     puts "You entered #{cohort}. Is that correct? y/n"
-    input = gets.chomp
+    input = gets.gsub(/[\n]/, '')
     until %w[y n].include?(input)
       puts 'Please enter y or n'
-      input = gets.chomp
+      input = gets.gsub(/[\n]/, '')
     end
     return cohort.to_sym if input.casecmp('y').zero?
   end
