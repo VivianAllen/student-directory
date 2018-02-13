@@ -1,3 +1,5 @@
+@students = []
+
 def input_name
   blanks = 0
   loop do
@@ -25,10 +27,10 @@ end
 
 def input_cohort
   loop do
-    puts "Please enter students cohort"
+    puts 'Please enter students cohort'
     cohort = gets.chomp
     if cohort.empty?
-      puts "If no input detected, default (November cohort) will be used"
+      puts 'If no input detected, default (November cohort) will be used'
       cohort = 'November'
     end
     puts "You entered #{cohort}. Is that correct? y/n"
@@ -61,32 +63,63 @@ def print_header
   puts '--------------'
 end
 
-def print(students)
-  return if students.count.zero?
-  students.each do |student|
+def print_student_list
+  return if @students.count.zero?
+  @students.each do |student|
     puts "#{student[:name].center(20)}
      (#{student[:cohort].to_s.center(9)} cohort)"
   end
 end
 
 def print_cohorts(students)
-  return if students.count.zero?
-  cohorts = students.map { |student| student[:cohort] }.uniq
+  return if @students.count.zero?
+  cohorts = @students.map { |student| student[:cohort] }.uniq
   # determine membership of each cohort
   cohorts.each do |cohort|
     puts "Students in #{cohort} cohort:"
-    students.each do |student|
+    @students.each do |student|
       puts student[:name] if student[:cohort] == cohort
     end
   end
 end
 
-def print_footer(students)
-  return if students.count.zero?
-  student_string = students.count > 1 ? 'students' : 'student'
-  puts "Overall, we have #{students.count} great #{student_string}"
+def print_footer
+  return if @students.count.zero?
+  student_string = @students.count > 1 ? 'students' : 'student'
+  puts "Overall, we have #{@students.count} great #{student_string}"
 end
-students = input_students
-print_header
-print_cohorts(students) # is this cool? print is already a built-in method
-print_footer(students)
+
+def print_menu
+  puts '1. Input the students'
+  puts '2. Show the students'
+  puts '9. Exit'
+end
+
+def show_students
+  print_header
+  print_student_list
+  print_footer
+end
+
+def process(selection)
+  case selection
+  when '1'
+    @students = input_students
+  when '2'
+    show_students
+  when '9'
+    exit
+  else
+    puts "I don't know what you meant, try again"
+  end
+end
+
+def interactive_menu
+  loop do
+    print_menu
+    process(gets.chomp)
+  end
+end
+
+## script below ##
+interactive_menu
