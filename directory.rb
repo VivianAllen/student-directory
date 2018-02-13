@@ -43,6 +43,10 @@ def input_cohort
   end
 end
 
+def add_student(name, cohort)
+  @students << { name: name, cohort: cohort.to_sym }
+end
+
 def input_students
   students = []
   puts 'Please enter the students details'
@@ -50,10 +54,9 @@ def input_students
   loop do
     name = input_name
     break if name.nil?
-    cohort = input_cohort
-    students << { name: name, cohort: cohort }
-    student_string = students.count > 1 ? 'students' : 'student'
-    puts "Now we have #{students.count} #{student_string}"
+    add_student(name, input_cohort)
+    student_string = @students.count > 1 ? 'students' : 'student'
+    puts "Now we have #{@students.count} #{student_string}"
   end
   students
 end
@@ -87,7 +90,7 @@ def load_students(filename = 'students.csv')
   file = File.open(filename, 'r')
   file.readlines.each do |line|
     name, cohort = line.chomp.split(',')
-    @students << { name: name, cohort: cohort.to_sym }
+    add_student(name, cohort)
   end
   file.close
 end
@@ -138,7 +141,7 @@ end
 def process(selection)
   case selection
   when '1'
-    @students = input_students
+    input_students
   when '2'
     show_students
   when '3'
