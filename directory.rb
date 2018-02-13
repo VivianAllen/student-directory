@@ -10,15 +10,15 @@ def input_name
       return nil
     end
     puts 'Please enter students name'
-    name = gets.chomp
+    name = STDIN.gets.chomp
     if name.empty?
       blanks += 1
     else
       puts "You entered #{name}. Is that correct? y/n"
-      input = gets.chomp
+      input = STDIN.gets.chomp
       until %w[y n].include?(input)
         puts 'Please enter y or n'
-        input = gets.chomp
+        input = STDIN.gets.chomp
       end
       return name if input.casecmp('y').zero?
     end
@@ -28,16 +28,16 @@ end
 def input_cohort
   loop do
     puts 'Please enter students cohort'
-    cohort = gets.chomp
+    cohort = STDIN.gets.chomp
     if cohort.empty?
       puts 'If no input detected, default (November cohort) will be used'
       cohort = 'November'
     end
     puts "You entered #{cohort}. Is that correct? y/n"
-    input = gets.chomp
+    input = STDIN.gets.chomp
     until %w[y n].include?(input)
       puts 'Please enter y or n'
-      input = gets.chomp
+      input = STDIN.gets.chomp
     end
     return cohort.to_sym if input.casecmp('y').zero?
   end
@@ -83,13 +83,24 @@ def save_students
   file.close
 end
 
-def load_students
-  file = File.open('students.csv', 'r')
+def load_students(filename = 'students.csv')
+  file = File.open(filename, 'r')
   file.readlines.each do |line|
     name, cohort = line.chomp.split(',')
     @students << { name: name, cohort: cohort.to_sym }
   end
   file.close
+end
+
+def try_load_students
+  filename = ARGV.first
+  return if filename.nil?
+  if File.exist?(filename)
+    load_students(filename)
+  else
+    puts "Sorry, #{filename} doesn't exist."
+    exit
+  end
 end
 
 def print_cohorts
@@ -144,9 +155,10 @@ end
 def interactive_menu
   loop do
     print_menu
-    process(gets.chomp)
+    process(STDIN.gets.chomp)
   end
 end
 
 ## script below ##
+try_load_students
 interactive_menu
