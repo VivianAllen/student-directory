@@ -43,6 +43,7 @@ end
 
 def add_student(name, cohort)
   @students << { name: name, cohort: cohort.to_sym }
+  puts "#{name}, #{cohort} added"
 end
 
 def count_students
@@ -69,39 +70,48 @@ end
 def print_student_list
   return if @students.count.zero?
   @students.each do |student|
-    puts "#{student[:name].center(20)}
-     (#{student[:cohort].to_s.center(9)} cohort)"
+    puts "#{student[:name].center(20)} \
+    (#{student[:cohort].to_s.center(9)} cohort)"
   end
 end
 
-def save_students
-  # open the file for writing
-  file = File.open('students.csv', 'w')
-  # iterate over the array of students
+def filename_chooser
+  puts 'Please enter filename (must be .csv file)'
+  loop do
+    filename = STDIN.gets.chomp
+    return filename if filename.end_with?('.csv')
+    puts 'Must be a .csv file!'
+  end
+end
+
+def save_students(filename)
+  file = File.open(filename, 'w')
   @students.each do |student|
     student_data = [student[:name], student[:cohort]]
     csv_line = student_data.join(',')
     file.puts csv_line
   end
   file.close
+  puts "student data saved to #{filename}"
 end
 
-def load_students(filename = 'students.csv')
+def load_students(filename)
   file = File.open(filename, 'r')
   file.readlines.each do |line|
     name, cohort = line.chomp.split(',')
     add_student(name, cohort)
   end
   file.close
+  puts "student data loaded from #{filename}"
 end
 
-def try_load_students
-  filename = ARGV.first.nil? ? 'students.csv' : ARGV.first
+def try_load_students(filename = ARGV.first)
+  filename = 'students.csv' if filename.nil?
   if File.exist?(filename)
     load_students(filename)
   else
     puts "Sorry, #{filename} doesn't exist."
-    exit
+    exit # why exit?
   end
 end
 
@@ -126,8 +136,8 @@ end
 def print_menu
   puts '1. Input the students'
   puts '2. Show the students'
-  puts '3. Save the list to students.csv'
-  puts '4. Load the list from students.csv'
+  puts '3. Save the list to csv'
+  puts '4. Load the list from csv'
   puts '9. Exit'
 end
 
@@ -144,9 +154,11 @@ def process(selection)
   when '2'
     show_students
   when '3'
-    save_students
+    filename = filename_chooser
+    save_students(filename)
   when '4'
-    load_students
+    filename = filename_chooser
+    try_load_students(filename)
   when '9'
     exit
   else
